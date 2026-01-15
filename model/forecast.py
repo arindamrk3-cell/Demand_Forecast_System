@@ -1,6 +1,8 @@
-import pandas as pd
+import pandas as pd,os
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 def generate_forecast(csv_path,steps):
+    os.makedirs("output", exist_ok=True)
+    os.makedirs("static", exist_ok=True)   
     df=pd.read_csv(csv_path,low_memory=False)
     required={"Date","Qty"}
     if not required.issubset(df.columns):
@@ -29,9 +31,11 @@ def generate_forecast(csv_path,steps):
     model_fit=model.fit()
     forecast=model_fit.forecast(steps=steps)
     forecast=forecast.clip(lower=0)
+
     output_path="output/forecast.csv"
     forecast.to_csv(output_path)
-    forecast.to_csv("static/forecast.csv")
+    #forecast.to_csv("static/forecast.csv")
+
     print("Forecats Generated")
     history=daily_demand.tail(30)
     history_date=history.index.astype(str).tolist()
