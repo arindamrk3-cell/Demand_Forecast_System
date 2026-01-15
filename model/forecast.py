@@ -20,6 +20,7 @@ def generate_forecast(csv_path,steps):
     daily_demand=daily_demand.asfreq("D")
     daily_demand["Qty"]=daily_demand["Qty"].interpolate()
     daily_demand=daily_demand.iloc[:-3]
+    daily_demand=daily_demand.tail(200)
     ##Train SARIMA model
     model=SARIMAX(
         daily_demand["Qty"],
