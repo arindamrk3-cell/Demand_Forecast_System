@@ -3,6 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Demand Forecast</title>
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
@@ -11,9 +13,18 @@
     <style>
         .chart-container {
             width: 70%;
-            height: 400px;
-            margin: auto;
+            max-width: 900px;
+            height: 300px;
+            margin: 20px auto;
         }
+        @media (max-width: 768px) {
+    .chart-container {
+        height: 250px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
     </style>
 </head>
 
@@ -33,6 +44,9 @@
     <div class="chart-container">
         <canvas id="barChart"></canvas>
     </div>
+    <p style="text-align:center; font-size:14px;">
+    🔵 Actual Demand &nbsp;&nbsp; 🟠 Forecasted Demand
+    </p>
 
 
     <script>

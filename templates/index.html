@@ -2,11 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Demand Forecasting System</title>
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
 
-    <style>
+    <!-- <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f6f8;
@@ -56,7 +58,43 @@
             font-size: 13px;
             color: #666;
         }
-    </style>
+    </style> -->
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f7fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+input, select, button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+button {
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+</style>
+
 </head>
 
 <body>
@@ -72,6 +110,7 @@
         text-align:center;">{{error}}</div>
     {% endif %}
 
+    <div class="container">
     <form action="/forecast" method="POST" enctype="multipart/form-data">
         <input type="file" name="file" required>
         <br>
@@ -83,6 +122,7 @@
         </select><br><br>
         <button type="submit">Generate Forecast</button>
     </form>
+    </div>
 
     <div class="note">
         Upload sales CSV file to generate demand forecast.
