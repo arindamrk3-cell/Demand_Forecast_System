@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Demand Forecast</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .chart-container {
+            width: 70%;
+            height: 400px;
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1 style="text-align:center;">Demand Forecast</h1>
+    <p style="text-align:center;">
+        History points: {{ history_values | length }} |
+        Forecast points: {{ forecast_values | length }}
+    </p>
+    {% if forecast_values %}
+    <div class="chart-container">
+        <canvas id="forecastChart"></canvas>
+    </div>
+
+    <br><br>
+    <div class="chart-container">
+        <canvas id="barChart"></canvas>
+    </div>
+
+
+    <script>
+        const historyDates = {{ history_dates | tojson }};
+        const historyValues = {{ history_values | tojson }};
+        const forecastDates = {{ forecast_dates | tojson }};
+        const forecastValues = {{ forecast_values | tojson }};
+
+        const labels = historyDates.concat(forecastDates);
+
+        const ctx = document.getElementById('forecastChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Historical Sales',
+                        data: historyValues.concat(Array(forecastValues.length).fill(null)),
+                        borderColor: 'blue',
+                        fill: false
+                    },
+                    {
+                        label: 'Forecasted Sales',
+                        data: Array(historyValues.length).fill(null).concat(forecastValues),
+                        borderColor: 'orange',
+                        borderDash: [5, 5],
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                const label = context.dataset.label;
+                                const value = context.parsed.y;
+                                return label + ': ' + value;
+                            }
+                        }
+                    }
+                }
+            }
+
+        });
+        const barLabels = historyDates.slice(-7).concat(forecastDates);
+
+        const actualData = historyValues.slice(-7);
+        const forecastData = Array(7).fill(null).concat(forecastValues);
+
+        const barCtx = document.getElementById('barChart').getContext('2d');
+        new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: barLabels,
+                datasets: [
+                    {
+                        label: 'Historical Sales',
+                        data: actualData.concat(Array(forecastValues.length).fill(null)),
+                        backgroundColor: 'rgba(54, 162, 235, 0.7)'
+                    },
+                    {
+                        label: 'Forecasted Sales',
+                        data: forecastData,
+                        backgroundColor: 'rgba(255, 159, 64, 0.7)'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return context.dataset.label + ': ' + context.parsed.y;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+    {% endif %}
+    {% if download %}
+    <br>
+    <div style="text-align:center;">
+        <a href="/static/forecast.csv" download >
+            <button class="dl" style="background-color: rgb(195, 225, 150);">Download Forecast CSV</button>
+        </a>
+    </div>
+    {% endif %}
+</body>
+
+</html>

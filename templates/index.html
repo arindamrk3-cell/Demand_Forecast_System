@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demand Forecasting System</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 30px 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 350px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        input[type="file"] {
+            margin: 15px 0;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        button:hover {
+            background-color: #0e74e0;
+            scale: .97;
+            transition: .7s;
+        }
+
+        .note {
+            margin-top: 15px;
+            font-size: 13px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Demand Forecasting System</h2>
+    {% if error %}
+        <div style="background-color:#f8d7da;
+        color:#721c24;
+        padding:10px;
+        border-radius:5px;
+        margin-bottom:15px;
+        text-align:center;">{{error}}</div>
+    {% endif %}
+
+    <form action="/forecast" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" required>
+        <br>
+        <label for="days">Forecast Days:</label>
+        <select name="days" id="days">
+            <option value="7">7 Days</option>
+            <option value="14">14 Days</option>
+            <option value="30">30 Days</option>
+        </select><br><br>
+        <button type="submit">Generate Forecast</button>
+    </form>
+
+    <div class="note">
+        Upload sales CSV file to generate demand forecast.
+    </div>
+</div>
+
+</body>
+</html>
