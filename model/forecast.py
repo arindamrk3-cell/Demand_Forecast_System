@@ -22,7 +22,7 @@ def generate_forecast(csv_path,steps):
     daily_demand=daily_demand.asfreq("D")
     daily_demand["Qty"]=daily_demand["Qty"].interpolate()
     daily_demand=daily_demand.iloc[:-3]
-    daily_demand=daily_demand.tail(200)
+    daily_demand=daily_demand.tail(160)
     train_data=daily_demand.iloc[:-7]["Qty"]
     #y_true=train_data.values
     
