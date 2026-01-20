@@ -15,10 +15,10 @@ def forecast():
             filepath=os.path.join(uploads,file.filename)
             file.save(filepath)
 
-            forecast_path,history_dates,history_values=generate_forecast(filepath,days)
+            forecast_path,history_dates,history_values,mae,rmse,mape=generate_forecast(filepath,days)
             forecast_df=pd.read_csv(forecast_path)
 
-            return render_template("forecast.html",forecast_dates=forecast_df.iloc[:,0].tolist(),forecast_values=forecast_df.iloc[:,1].tolist(),history_dates=history_dates,history_values=history_values,download=True)
+            return render_template("forecast.html",forecast_dates=forecast_df.iloc[:,0].tolist(),forecast_values=forecast_df.iloc[:,1].tolist(),history_dates=history_dates,history_values=history_values,mae=round(mae,2),rmse=round(rmse,2),mape=round(mape,2),download=True)
         except ValueError as e:
             return render_template("index.html",error=str(e))
 if __name__=="__main__":

@@ -1,4 +1,6 @@
 import pandas as pd,os
+from sklearn.metrics import mean_absolute_error,mean_squared_error
+import numpy  as np
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 def generate_forecast(csv_path,steps):
     os.makedirs("output", exist_ok=True)
@@ -21,6 +23,30 @@ def generate_forecast(csv_path,steps):
     daily_demand["Qty"]=daily_demand["Qty"].interpolate()
     daily_demand=daily_demand.iloc[:-3]
     daily_demand=daily_demand.tail(200)
+    train_data=daily_demand.iloc[:-7]["Qty"]
+    #y_true=train_data.values
+    
+    test_data=daily_demand.iloc[-7:]["Qty"]
+    #y_pred=test_data.values
+    #train mmodel for evaluation
+    eval_model=SARIMAX(
+        train_data,
+        order=(1,1,1),
+        seasonal_order=(1,1,1,7),
+        enforce_invertibility=False,
+        enforce_stationarity=False
+    )
+    eval_fit=eval_model.fit(disp=False)
+    test_pred=eval_fit.forecast(steps=7)
+    y_true=test_data.values
+    y_pred=test_pred.values
+    mae=mean_absolute_error(y_true,y_pred)
+    rmse=np.sqrt(mean_squared_error(y_true,y_pred))
+    mape = np.mean(np.abs((y_true - y_pred) / y_true)) * 100
+
+    print(f"mean absolute error:{mae}")
+    print(f"root mean squared error:{rmse}")
+    print(f"% error:{mape}")
     ##Train SARIMA model
     model=SARIMAX(
         daily_demand["Qty"],
@@ -41,4 +67,9 @@ def generate_forecast(csv_path,steps):
     history=daily_demand.tail(30)
     history_date=history.index.astype(str).tolist()
     history_values=history["Qty"].tolist()
-    return output_path,history_date,history_values
+    # metrics={
+    #     "mae":round(mae,2),
+    #     "rmse":round(rmse,2),
+    #     "mape":round(mape,2)
+    # }
+    return output_path,history_date,history_values,mae,rmse,mape

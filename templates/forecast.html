@@ -10,7 +10,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <style>
+    <!-- <style>
         .chart-container {
             width: 70%;
             max-width: 900px;
@@ -25,12 +25,65 @@
     h1 {
         font-size: 20px;
     }
-    </style>
+    </style> -->
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 15px;
+    background: #f4f6f9;
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+}
+
+h1 {
+    text-align: center;
+}
+
+.metrics {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+}
+
+.metric-box {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    width: 30%;
+    text-align: center;
+}
+
+.chart-container {
+    background: white;
+    height: 300px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .metrics {
+        flex-direction: column;
+    }
+
+    .metric-box {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+</style>
+
 </head>
 
 <body>
 
-    <h1 style="text-align:center;">Demand Forecast</h1>
+    <!-- <h1 style="text-align:center;">Demand Forecast</h1>
     <p style="text-align:center;">
         History points: {{ history_values | length }} |
         Forecast points: {{ forecast_values | length }}
@@ -46,7 +99,37 @@
     </div>
     <p style="text-align:center; font-size:14px;">
     🔵 Actual Demand &nbsp;&nbsp; 🟠 Forecasted Demand
-    </p>
+    </p> -->
+    <div class="container">
+
+<h1>Demand Forecast Results</h1>
+
+<div class="metrics">
+    <div class="metric-box">
+        <strong>MAE</strong><br>
+        {{ mae }}
+    </div>
+    <div class="metric-box">
+        <strong>RMSE</strong><br>
+        {{ rmse }}
+    </div>
+    <div class="metric-box">
+        <strong>MAPE</strong><br>
+        {{ mape }}%
+    </div>
+</div>
+
+<div class="chart-container">
+    <canvas id="forecastChart"></canvas>
+</div>
+<br><br>
+<div class="chart-container">
+    <canvas id="barChart"></canvas>
+</div>
+
+<p style="text-align:center; margin-top:10px;">
+    🔵 Actual Demand &nbsp;&nbsp; 🟠 Forecasted Demand
+</p>
 
 
     <script>

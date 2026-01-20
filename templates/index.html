@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,59 +6,6 @@
 
     <title>Demand Forecasting System</title>
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
-
-
-    <!-- <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f8;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .container {
-            background-color: #ffffff;
-            padding: 30px 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 350px;
-        }
-
-        h2 {
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        input[type="file"] {
-            margin: 15px 0;
-        }
-
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 15px;
-        }
-
-        button:hover {
-            background-color: #0e74e0;
-            scale: .97;
-            transition: .7s;
-        }
-
-        .note {
-            margin-top: 15px;
-            font-size: 13px;
-            color: #666;
-        }
-    </style> -->
     <style>
 body {
     font-family: Arial, sans-serif;
@@ -130,4 +77,128 @@ button {
 </div>
 
 </body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demand Forecasting System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            width: 90%;
+            max-width: 420px;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 14px;
+            color: #555;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 12px;
+            font-size: 16px;
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .spinner {
+    width: 40px;
+    height: 40px;
+    border: 5px solid #ddd;
+    border-top: 5px solid #007bff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <h1>Demand Forecasting</h1>
+    <p>Upload sales data CSV to forecast future demand</p>
+
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <form action="/forecast" method="POST" enctype="multipart/form-data" onsubmit="showLoading()">
+
+        <input type="file" name="file" required>
+
+        <select name="days">
+            <option value="7">Forecast 7 Days</option>
+            <option value="14" selected>Forecast 14 Days</option>
+            <option value="30">Forecast 30 Days</option>
+        </select>
+
+        <button type="submit">Generate Forecast</button>
+    </form>
+    <div id="loading" style="display:none; margin-top:15px;">
+    <div class="spinner"></div>
+    <p style="margin-top:10px;">Generating forecast, please wait...</p>
+</div>
+
+
+</div>
+
+</body>
+<script>
+function showLoading() {
+    document.querySelector("button").disabled = true;
+    document.getElementById("loading").style.display = "block";
+}
+</script>
+
 </html>
