@@ -1,4 +1,6 @@
 flask
+scikit-learn
+numpy
 pandas
 statsmodels
 gunicorn
