@@ -22,7 +22,7 @@ def generate_forecast(csv_path,steps):
     daily_demand=daily_demand.asfreq("D")
     daily_demand["Qty"]=daily_demand["Qty"].interpolate()
     daily_demand=daily_demand.iloc[:-3]
-    daily_demand=daily_demand.tail(200)
+    daily_demand=daily_demand.tail(300)
     train_data=daily_demand.iloc[:-7]["Qty"]
     #y_true=train_data.values
     
@@ -31,8 +31,8 @@ def generate_forecast(csv_path,steps):
     #train mmodel for evaluation
     eval_model=SARIMAX(
         train_data,
-        order=(1,1,1),
-        seasonal_order=(1,1,1,7),
+        order=(2,1,1),
+        seasonal_order=(1,0,1,7),
         enforce_invertibility=False,
         enforce_stationarity=False
     )
@@ -50,8 +50,8 @@ def generate_forecast(csv_path,steps):
     ##Train SARIMA model
     model=SARIMAX(
         daily_demand["Qty"],
-        order=(1,1,1),
-        seasonal_order=(1,1,1,7),
+        order=(2,1,1),
+        seasonal_order=(1,0,1,7),
         enforce_invertibility=False,
         enforce_stationarity=False
     )
